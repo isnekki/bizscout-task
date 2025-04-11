@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { AxiosResponse } from 'axios';
 import { lastValueFrom } from 'rxjs';
-import { ResponsesService } from 'src/responses/responses.service';
-import { WebsocketGateway } from 'src/websocket/websocket.gateway';
+import { ResponsesService } from '../responses/responses.service';
+import { WebsocketGateway } from '../websocket/websocket.gateway';
 
 @Injectable()
 export class PingService {
@@ -28,7 +28,7 @@ export class PingService {
         response.status,
       );
     } catch (error) {
-      console.error('Error pingint HTTP bin: ', error);
+      console.error('Error pinging httpbin:', error);
     }
   }
 
