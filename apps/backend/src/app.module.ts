@@ -18,7 +18,7 @@ import { ResponseData } from './responses/entities/response-data.entity';
     WebsocketModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'monitor.db',
+      database: 'responses.db',
       entities: [ResponseData],
       synchronize: true,
     }),
