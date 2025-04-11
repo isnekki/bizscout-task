@@ -1,23 +1,32 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule/dist/decorators/cron.decorator';
-import { CronExpression } from '@nestjs/schedule/dist/enums/cron-expression.enum';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { AxiosResponse } from 'axios';
 import { lastValueFrom } from 'rxjs';
+import { ResponsesService } from 'src/responses/responses.service';
+import { WebsocketGateway } from 'src/websocket/websocket.gateway';
 
 @Injectable()
 export class PingService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly responsesService: ResponsesService,
+    private readonly websocketGateway: WebsocketGateway,
+  ) {}
 
-  @Cron(CronExpression.EVERY_5_MINUTES)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async pingHttpBin() {
     const payload = this.generateRandomPayload();
 
     try {
-      const response: AxiosResponse<unknown> = await lastValueFrom(
+      const response: AxiosResponse<any> = await lastValueFrom(
         this.httpService.post('https://httpbin.org/anything', payload),
       );
-      this.processResponse(response.data, payload);
+      await this.processResponse(
+        response.data as Record<string, unknown>,
+        payload,
+        response.status,
+      );
     } catch (error) {
       console.error('Error pingint HTTP bin: ', error);
     }
@@ -30,8 +39,21 @@ export class PingService {
     };
   }
 
-  private processResponse(responseData: unknown, requestPayload: unknown) {
-    console.log('Received response: ', responseData);
-    console.log('Received payload: ', requestPayload);
+  private async processResponse(
+    responseData: Record<string, unknown>,
+    requestPayload: Record<string, unknown>,
+    statusCode: number,
+  ) {
+    try {
+      const savedResponse = await this.responsesService.create(
+        requestPayload,
+        responseData,
+        statusCode,
+      );
+
+      this.websocketGateway.broadcastNewData(savedResponse);
+    } catch (error) {
+      console.error('Error saving to database: ', error);
+    }
   }
 }

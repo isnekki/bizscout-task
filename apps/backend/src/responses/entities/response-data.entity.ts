@@ -5,15 +5,15 @@ export class ResponseData {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'jsonb' })
+  @Column({ type: 'json' })
   requestPayload: Record<string, any>;
 
-  @Column({ type: 'jsonb' })
+  @Column({ type: 'json' })
   responseBody: Record<string, any>;
 
   @Column()
   statusCode: number;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'datetime' })
   timestamp: Date;
 }
