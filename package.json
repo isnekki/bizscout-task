@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "bizscout-task",
   "private": true,
   "scripts": {
     "build": "turbo run build",
