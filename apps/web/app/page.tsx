@@ -1,11 +1,10 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import styles from "./page.module.css";
 import { io } from "socket.io-client";
 
 export default function Home() {
-  const [pings, setPings] = useState<any[]>([])
+  const [pings, setPings] = useState<unknown[]>([])
 
   useEffect(() => {
 
