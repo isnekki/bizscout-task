@@ -19,7 +19,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div className={styles.page}>
+    <div className='bg-red-200'>
       <pre>{JSON.stringify(pings, null, 2)}</pre>
     </div>
   );
