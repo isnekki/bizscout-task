@@ -34,8 +34,9 @@ pnpm install
 
 ### Application Usage
 
-1. Open your web browser and navigate to `http://localhost:3000/`
-2. The dashboard will display a table and a chart to present the data. Above that will be a **Live** and **History** tab.
+1. Run `pnpm dev` in the root folder and wait for both backend and frontend to fully compile
+2. Open your web browser and navigate to `http://localhost:3000/`
+3. The dashboard will display a table and a chart to present the data. Above that will be a **Live** and **History** tab.
    - The _Live_ tab is where requests will be sent every 5 minutes with data coming from the backend
    - The _History_ tab is where requests can be queried from within a range
 
@@ -71,6 +72,7 @@ This HTTP monitor follows the client-server architecture with a RESTful API.
 - Improve frontend UI/UX
 - Add more comprehensive testing (more integration and end-to-end testing)
 - Store the responses in a separate database or cloud storage
+- Extract reusable credentials into an .env file (i.e. localhost:3000)
 
 ## Testing Strategy and Core Component Identification
 
