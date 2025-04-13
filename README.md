@@ -71,7 +71,7 @@ This HTTP monitor follows the client-server architecture with a RESTful API.
 - Implement more robust error handling and logging
 - Improve frontend UI/UX
 - Add more comprehensive testing (more integration and end-to-end testing)
-- Store the responses in a separate database or cloud storage
+- Store the responses in a separate database or cloud storage (currently stored locally in a db file)
 - Extract reusable credentials into an .env file (i.e. localhost:3000)
 
 ## Testing Strategy and Core Component Identification
