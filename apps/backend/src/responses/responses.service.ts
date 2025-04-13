@@ -40,11 +40,5 @@ export class ResponsesService {
       skip: start - 1,
       take: limit,
     });
-    return await this.responseDataRepository
-      .createQueryBuilder('responses')
-      .select()
-      .skip(start)
-      .take(limit)
-      .getMany();
   }
 }
