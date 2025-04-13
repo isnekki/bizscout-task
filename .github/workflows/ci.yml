@@ -33,6 +33,7 @@ jobs:
 
       - name: Save backend coverage
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: backend-coverage
           path: apps/backend/coverage
