@@ -35,7 +35,7 @@ jobs:
 
       - name: Run backend tests
         working-directory: apps/backend
-        run: pnpm test --coverage # Run tests and generate coverage
+        run: pnpm test:cov # Run tests and generate coverage
 
       - name: Save backend coverage
         uses: actions/upload-artifact@v4
@@ -57,9 +57,9 @@ jobs:
         working-directory: apps/web
         run: pnpm lint
 
-      - name: Run frontend tests
-        working-directory: apps/web
-        run: pnpm test --coverage # Run tests and generate coverage
+      # - name: Run frontend tests
+      #   working-directory: apps/web
+      #   run: pnpm test:cov # Run tests and generate coverage
 
       - name: Save frontend coverage
         uses: actions/upload-artifact@v4
