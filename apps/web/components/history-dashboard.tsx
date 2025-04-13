@@ -7,6 +7,7 @@ import type { Data } from "@repo/types";
 import { columns } from "./table-columns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 /**
  * This is the Dashboard component for displaying historical data from the backend's database based on
@@ -14,18 +15,27 @@ import { Button } from "@/components/ui/button";
  */
 export default function HistoryDashboard() {
     const [historicalPings, setHistoricalPings] = useState<Data[]>([])
-    const [queryFrom, setQueryFrom] = useState<number>(1)
-    const [queryTo, setQueryTo] = useState<number>(10)
+    const [queryFrom, setQueryFrom] = useState<string>('1')
+    const [queryTo, setQueryTo] = useState<string>('1')
 
     // Users input their starting point and ending point before pressing the 'Search' button to receive the correct historical data.
     const history = useMemo(async () => {
-        const response = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ start: `${queryFrom - 1}`, limit: `${queryTo}` }))
-        const history = await response.json()
-        return history as Data[]
+        try {
+            const response = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ start: `${parseInt(queryFrom) - 1}`, limit: queryTo }))
+            const history = await response.json()
+            return history as Data[]
+        } catch (error) {
+            console.error('Error fetching data: ', error)
+            toast.error('Uh-oh, something went wrong!', {
+                description: 'We encountered an error trying to fetch data for this page.',
+            })
+        }
     }, [queryFrom, queryTo])
 
     async function handleQuery() {
-        setHistoricalPings(await history)
+        const data = await history
+        if (!data) return
+        setHistoricalPings(data)
     }
 
     return (
@@ -36,7 +46,10 @@ export default function HistoryDashboard() {
                         type="number"
                         placeholder="From"
                         value={queryFrom.toString()}
-                        onChange={(event) => setQueryFrom(parseInt(event.target.value))}
+                        onChange={(event) => {
+                            if (parseInt(event.target.value) <= 0) return setQueryFrom('1')
+                            setQueryFrom(event.target.value)
+                        }}
                         className='max-w-20'
                     />
                     to
@@ -44,7 +57,10 @@ export default function HistoryDashboard() {
                         type="number"
                         placeholder="To"
                         value={queryTo}
-                        onChange={(event) => setQueryTo(parseInt(event.target.value))}
+                        onChange={(event) => {
+                            if (parseInt(event.target.value) <= 0) return setQueryTo('1')
+                            setQueryTo(event.target.value)
+                        }}
                         className='max-w-20'
                     />
                     <Button onClick={async () => await handleQuery()}>Search</Button>

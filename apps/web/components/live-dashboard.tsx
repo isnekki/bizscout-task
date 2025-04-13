@@ -6,6 +6,7 @@ import { io } from 'socket.io-client';
 import { columns } from './table-columns';
 import { DataTable } from './data-table';
 import { Chart } from './chart';
+import { toast } from 'sonner';
 
 /**
  * This is the Dashboard component for displaying live data from the backend's WebSocket.
@@ -23,18 +24,30 @@ export default function LiveDashboard() {
                 if (isMounted) setPings((state) => [...state, ...(history satisfies Data[])])
             } catch (error) {
                 console.error('Error retrieving history: ', error)
+                toast.error('Uh-oh, something went wrong!', {
+                    description: 'We encountered an error fetching data for this page.'
+                })
             }
         })();
 
         // Connect to the WebSocket and add logic to update state based on responses from the WebSocket
         const socket = io('ws://localhost:3001')
-        socket.on('connect', () => console.log('Connected to WebSocket!'))
-        socket.on('disconnect', () => console.log('Disconnected from WebSocket!'))
+        socket.on('connect', () => {
+            console.log('Connected to the WebSocket.')
+            toast.success('Live feed connected!')
+        })
+        socket.on('disconnect', () => {
+            console.warn('Dicsonnected from the WebSocket.')
+            toast.warning('Disconnected from the live feed.')
+        })
         socket.on('newResponse', (data) => {
             try {
                 setPings((state) => [data as Data, ...state])
             } catch(err) {
                 console.error(err)
+                toast.error('Uh-oh, something went wrong!', {
+                    description: 'We encountered an error trying to read the live data.'
+                })
             }
         })
 
