@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DataController } from './data/data.controller';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PingModule } from './ping/ping.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -23,7 +22,7 @@ import { ResponseData } from './responses/entities/response-data.entity';
       synchronize: true,
     }),
   ],
-  controllers: [AppController, DataController],
+  controllers: [AppController],
   providers: [AppService, WebsocketGateway],
 })
 export class AppModule {}

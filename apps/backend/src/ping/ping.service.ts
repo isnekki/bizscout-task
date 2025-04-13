@@ -14,7 +14,7 @@ export class PingService {
     private readonly websocketGateway: WebsocketGateway,
   ) {}
 
-  @Cron(CronExpression.EVERY_5_MINUTES)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async pingHttpBin() {
     const payload = this.generateRandomPayload();
 

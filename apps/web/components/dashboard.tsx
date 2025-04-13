@@ -12,7 +12,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         (async() => {
-            const historyResponse = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ limit: '20' }).toString())
+            const historyResponse = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ limit: '10' }).toString())
             const history = await historyResponse.json()
             try {
                 setPings((state) => [...state, ...(history satisfies Data[])])
