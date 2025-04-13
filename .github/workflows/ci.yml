@@ -19,8 +19,7 @@ jobs:
         with:
           node-version: "18.x"
 
-      - name: Install local types package
-        working-directory: packages/types
+      - name: Install root level dependencies
         run: npm install
 
       - name: Install backend dependencies
