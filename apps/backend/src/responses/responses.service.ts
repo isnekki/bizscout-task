@@ -36,6 +36,10 @@ export class ResponsesService {
   }
 
   async findFrom(start: number, limit?: number): Promise<ResponseData[]> {
+    return await this.responseDataRepository.find({
+      skip: start - 1,
+      take: limit,
+    });
     return await this.responseDataRepository
       .createQueryBuilder('responses')
       .select()
