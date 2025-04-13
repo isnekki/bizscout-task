@@ -1,0 +1,62 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Install backend dependencies
+        working-directory: apps/backend
+        run: npm install
+
+      - name: Lint backend
+        working-directory: apps/backend
+        run: npm run lint
+
+      - name: Run backend tests
+        working-directory: apps/backend
+        run: npm run test --coverage # Run tests and generate coverage
+
+      - name: Save backend coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-coverage
+          path: apps/backend/coverage
+
+      # Frontend Setup, Linting, and Testing
+      - name: Set up frontend Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Install frontend dependencies
+        working-directory: apps/web
+        run: npm install
+
+      - name: Lint frontend
+        working-directory: apps/web
+        run: npm run lint
+
+      - name: Run frontend tests
+        working-directory: apps/web
+        run: npm run test --coverage # Run tests and generate coverage
+
+      - name: Save frontend coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-coverage
+          path: apps/web/coverage
