@@ -55,6 +55,9 @@ describe('Shadcn Chart', () => {
         global.ResizeObserver = undefined;
     })
 
+    /**
+     * Check if the chart's container has rendered correctly
+     */
     it('renders correctly', () => {
         render(<Chart pings={mockData} />);
         expect(screen.getByTestId('chart-card')).toBeInTheDocument()

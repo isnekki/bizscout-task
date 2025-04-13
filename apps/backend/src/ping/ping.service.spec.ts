@@ -8,6 +8,10 @@ import { of } from 'rxjs';
 import { WebsocketGateway } from '../websocket/websocket.gateway';
 
 describe('PingService', () => {
+  /**
+   * 1. Mock the parameters of the PingService
+   * 2. Retrieve the correct parameter object before each test
+   */
   let service: PingService;
   let httpService: HttpService;
   let responsesService: ResponsesService;
@@ -46,6 +50,10 @@ describe('PingService', () => {
   });
 
   describe('pingHttpBin', () => {
+    /**
+     * 1. Call the pingHttpBin function
+     * 2. Expect the httpService to make a POST request to httpbin with a payload
+     */
     it('should call httpService.post with the correct URL and payload', async () => {
       await service.pingHttpBin();
       expect(httpService.post).toHaveBeenCalledWith(
@@ -54,6 +62,12 @@ describe('PingService', () => {
       );
     });
 
+    /**
+     * 1. Create dummy data
+     * 2. Mock the httpService's post method to return a response
+     * 3. Call the pingHttpBin function
+     * 4. Expect the response from the POST request to be saved in the database
+     */
     it('should call responsesServices.create with the response data and payload', async () => {
       const mockPayload = {
         timestamp: expect.any(String),

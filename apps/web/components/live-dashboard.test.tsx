@@ -5,6 +5,7 @@ import LiveDashboard from './live-dashboard'
 import { io } from 'socket.io-client'
 import { toast } from 'sonner'
 
+// Mock dependencies for the live dashboard
 jest.mock('socket.io-client')
 jest.mock('sonner', () => ({
     toast: {
@@ -34,7 +35,9 @@ jest.mock('./table-columns', () => ({
     columns: [{ header: 'Test', accessorKey: 'test' }]
 }))
 
+// Main test
 describe('LiveDashboard', () => {
+    // Instantiate dummy data
     const mockSocket = {
         on: jest.fn(),
         disconnect: jest.fn(),
@@ -47,7 +50,7 @@ describe('LiveDashboard', () => {
 
     const mockNewData = { id: '3', timestamp: new Date(), requestPaylaod: { randomNumber: 3, timestamp: new Date().toString() }, statusCode: 200 }
 
-
+    // Clear all mocks and reinstantiate global.fetch before each test
     beforeEach(() => {
         jest.clearAllMocks();
 
@@ -60,6 +63,11 @@ describe('LiveDashboard', () => {
         )
     })
 
+    /**
+     * 1. Render the live dashboard
+     * 2. On mount, the component fetches some filler data
+     * 3. Check whether the data has been fetched and presented on the UI correctly
+     */
     it ('renders the dashboard with initial data', async () => {
         render(<LiveDashboard />)
 
@@ -73,6 +81,13 @@ describe('LiveDashboard', () => {
         })
     })
 
+    /**
+     * 1. Render the live dashboard
+     * 2. On mount, the component fetches some filler data
+     * 3. Expect to connect to the WebSocket on the backend
+     * 4. Replicate each callback for the socket listeners
+     * 5. Expect the correct response from each callback
+     */
     it('connects to the WebSocket and handles events', async () => {
         render(<LiveDashboard />)
 
@@ -101,6 +116,11 @@ describe('LiveDashboard', () => {
         })
     })
 
+    /**
+     * 1. Instantiate global.fetch to throw an error
+     * 2. Render the live dashboard
+     * 3. Fetching will throw an error and should be handled with a Shadcn toast
+     */
     it('handles fetch errors properly', async () => {
         global.fetch = jest.fn().mockImplementation(() => {
             Promise.resolve({
@@ -120,6 +140,13 @@ describe('LiveDashboard', () => {
         })
     })
 
+    /**
+     * 1. Replicate useState in jest mock form
+     * 2. Render the live dashboard
+     * 3. Set the implementation of setPings to throw an error
+     * 4. Call the socket callback
+     * 5. Expect the Shadcn toast to display an error
+     */
     it('handles failing responses from the websocket properly', async () => {
         const setPingsSpy = jest.fn()
         jest.spyOn(React, 'useState').mockImplementationOnce(() => [[], setPingsSpy])
@@ -146,6 +173,9 @@ describe('LiveDashboard', () => {
         })
     })
 
+    /**
+     * Self-explanatory
+     */
     it('safely disconnects from the websocket', async() => {
         const { unmount } = render(<LiveDashboard />)
         unmount()

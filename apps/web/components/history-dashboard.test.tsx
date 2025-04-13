@@ -4,6 +4,7 @@ import '@testing-library/jest-dom'
 import HistoryDashboard from './history-dashboard'
 import { toast } from 'sonner'
 
+// Mock dependencies
 jest.mock('sonner', () => ({
     toast: {
         success: jest.fn(),
@@ -45,9 +46,11 @@ jest.mock('../web/components/ui/input', () => ({
     ))
 }))
 
+// Instantiate global.fetch as a jest function
 global.fetch = jest.fn()
 
 describe('History Dashboard', () => {
+    // Mock data
     const mockHistoryData = [
         { 
             id: '1', 
@@ -101,6 +104,7 @@ describe('History Dashboard', () => {
 
     let mockFetch: jest.Mock<Promise<Response>>;
 
+    // Run some clearing before and after each test
     beforeAll(() => {
         jest.clearAllMocks();
         global.fetch = jest.fn().mockImplementation(async (url) => {
@@ -124,6 +128,13 @@ describe('History Dashboard', () => {
         mockFetch.mockClear()
     })
 
+    /**
+     * 1. Render the History Dashboard
+     * 2. On mount, the component fetches 10 rows
+     * 3. The range inputs have a default value of 1 and 10 respectively
+     * 4. Expect that the inputs have those values on mount
+     * 5. Check if the rendered data is according to the request
+     */
     it('renders the dashboard with default values', async () => {
         render(<HistoryDashboard />)
 
@@ -140,6 +151,10 @@ describe('History Dashboard', () => {
         })
     })
 
+    /**
+     * 1. Render the History Dashboard
+     * 2. Manually update the values of each input and check if they are updating
+     */
     it('updates input values correctly', async () => {
         render(<HistoryDashboard />)
 
@@ -156,6 +171,13 @@ describe('History Dashboard', () => {
         expect(screen.getByTestId('input-to')).toHaveValue(1)
     })
 
+    /**
+     * 1. Render the History Dashboard
+     * 2. Expect to see the initial rendered data after mounting
+     * 3. Change the values of the inputs
+     * 4. Setting the inputs state causes a new request to be made
+     * 5. Expect the new data
+     */
     it('fetches data and updates state', async () => { 
         render(<HistoryDashboard />)
         
@@ -177,6 +199,13 @@ describe('History Dashboard', () => {
         });
     })
 
+    /**
+     * 1. Instantiate global.fetch to throw an error
+     * 2. Render the History Dashboard
+     * 3. Change the value of the top-end range input
+     * 4. Expect an error after attempting to fetch
+     * 5. Shadcn toast should handle the UI for the error
+     */
     it('handles fetch error properly', async () => {
         global.fetch = jest.fn(() => 
             Promise.reject(new Error('Network error'))
@@ -199,6 +228,9 @@ describe('History Dashboard', () => {
         expect(screen.getByText('Chart with 0 data points')).toBeInTheDocument()
     })
 
+    /**
+     * Similar to the test above but throwing the error on JSON parse rather than on Fetch
+     */
     it('handles JSON parsing error properly', async () => {
         global.fetch = jest.fn().mockImplementation(() => 
             Promise.resolve({

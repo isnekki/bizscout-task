@@ -18,7 +18,7 @@ export default function HistoryDashboard() {
     const [queryTo, setQueryTo] = useState<string>('10')
     const [cache, setCache] = useState<Record<string, Data[]>>({})
 
-    // Users input their starting point and ending point before pressing the 'Search' button to receive the correct historical data.
+    // Callback to query the database with a start and limit parameter
     const fetchHistoricalPings = useCallback(async (start: string, limit: string) => {
         try {
             const response = await fetch(`http://localhost:3002/api/responses?start=${parseInt(start) - 1}&limit=${limit}`);
@@ -32,6 +32,7 @@ export default function HistoryDashboard() {
         }
     }, [])
 
+    // Check cache before attempting to make a fetch request to the backend
     const handleQuery = useCallback(async () => {
         const cacheKey = `${queryFrom}-${queryTo}`
 
@@ -48,6 +49,7 @@ export default function HistoryDashboard() {
         }
     }, [cache, fetchHistoricalPings, queryFrom, queryTo])
 
+    // Handle first query
     useEffect(() => {
         handleQuery()
     }, [handleQuery])

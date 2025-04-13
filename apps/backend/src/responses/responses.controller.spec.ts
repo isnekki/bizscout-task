@@ -8,6 +8,9 @@ describe('ResponsesController', () => {
   let controller: ResponsesController;
   let responsesService: ResponsesService;
 
+  /**
+   * 1. Instantiate the controller with the correct parameters
+   */
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ResponsesController],
@@ -119,6 +122,11 @@ describe('ResponsesController', () => {
       },
     ];
 
+    /**
+     * 1. Mock the findAll function to return the dummy data
+     * 2. Call the getResponses function
+     * 3. Expect the correct functions to be called and to return the correct data
+     */
     it('should call responsesService.findAll when no query parameters are provided', async () => {
       (responsesService.findAll as jest.Mock).mockResolvedValue(
         mockResponseData,
@@ -132,6 +140,11 @@ describe('ResponsesController', () => {
       expect(result).toEqual(mockResponseData);
     });
 
+    /**
+     * 1. Mock the findWithLimit function to return the sliced dummy data
+     * 2. Call the getResponses function with the limit parameter
+     * 3. Expect the correct functions to be called and to return the correct data
+     */
     it('should call responseService.findWithLimit when only limit is provided', async () => {
       const limit = '2';
       const parsedLimit = parseInt(limit);
@@ -148,6 +161,9 @@ describe('ResponsesController', () => {
       expect(result).toEqual(limitedResponses);
     });
 
+    /**
+     * Same as above test but with a starting point and a limit parameter
+     */
     it('should call responseService.findRom when both limit and start is provided', async () => {
       const limit = '3';
       const start = '5';

@@ -68,6 +68,12 @@ describe('ResponsesService', () => {
     expect(service).toBeDefined();
   });
 
+  /**
+   * 1. Instantiate dummy data
+   * 2. When creating a row, check if the create function has been called with the correct parameters
+   * 3. The create function calls the save function, expect that the save function is also called with the correct parameters
+   * 4. Expect that the returned data is the same as the data that was created
+   */
   describe('create', () => {
     it('should create and save a new response data', async () => {
       const requestPayload = { test: 'data' };
@@ -95,6 +101,9 @@ describe('ResponsesService', () => {
     });
   });
 
+  /**
+   * 1. Check if the findAll function of the service returns all the rows in the database
+   */
   describe('findAll', () => {
     it('should return an array of response data', async () => {
       jest
@@ -108,6 +117,9 @@ describe('ResponsesService', () => {
     });
   });
 
+  /**
+   * 1. Check if the find function of the service returns the correct rows and the correct row count
+   */
   describe('findWithLimit', () => {
     it('should return response data with limit and ordered by timestamp DESC', async () => {
       const limit = 10;
@@ -127,6 +139,9 @@ describe('ResponsesService', () => {
     });
   });
 
+  /**
+   * 1. Check if the findFrom function of the service returns the rows from the correct starting point and the correct row count
+   */
   describe('findFrom', () => {
     it('should return response data with skip and take', async () => {
       const start = 5;
