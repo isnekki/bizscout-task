@@ -35,7 +35,7 @@ export class ResponsesService {
     });
   }
 
-  async findFrom(start: number, limit: number): Promise<ResponseData[]> {
+  async findFrom(start: number, limit?: number): Promise<ResponseData[]> {
     return await this.responseDataRepository
       .createQueryBuilder('responses')
       .select()

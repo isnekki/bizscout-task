@@ -1,25 +1,12 @@
-'use client'
-
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import Dashboard from "../components/dashboard";
 
 export default function Home() {
-  const [pings, setPings] = useState<unknown[]>([])
-
-  useEffect(() => {
-
-    const socket = io('http://localhost:3001')
-
-    socket.on('connect', () => console.log('Connected to WebSocket!'))
-    socket.on('disconnect', () => console.log('Disconnected from WebSocket!'))
-    socket.on('newResponse', (data) => setPings((state) => [...state, JSON.stringify(data)]))
-
-    return () => { socket.disconnect() }
-  }, [])
-
   return (
-    <div className='bg-red-200'>
-      <pre>{JSON.stringify(pings, null, 2)}</pre>
+    <div className='flex flex-col min-h-screen w-full items-center justify-center'>
+      <div className='container mx-auto py-10 max-w-5xl p-5'>
+        <h1 className='font-bold text-2xl'>Dashboard</h1>
+        <Dashboard />
+      </div>
     </div>
   );
 }
