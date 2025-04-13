@@ -13,6 +13,7 @@ export class WebsocketGateway
   @WebSocketServer()
   server: Server;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleConnection(client: Socket, ...args: any[]) {
     try {
       client.emit('Connected!', { status: 'good' });

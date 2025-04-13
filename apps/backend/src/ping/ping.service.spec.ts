@@ -11,7 +11,6 @@ describe('PingService', () => {
   let service: PingService;
   let httpService: HttpService;
   let responsesService: ResponsesService;
-  let websocketGateway: WebsocketGateway;
 
   const mockHttpService = {
     post: jest.fn(() => of({ data: { mock: 'response' }, status: 200 } as any)),
@@ -40,7 +39,6 @@ describe('PingService', () => {
     service = module.get<PingService>(PingService);
     httpService = module.get<HttpService>(HttpService);
     responsesService = module.get<ResponsesService>(ResponsesService);
-    websocketGateway = module.get<WebsocketGateway>(WebsocketGateway);
   });
 
   it('should be defined', () => {
