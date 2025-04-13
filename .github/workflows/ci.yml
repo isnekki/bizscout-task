@@ -19,8 +19,9 @@ jobs:
         with:
           node-version: "18.x"
 
-      - name: Enable npm workspaces
-        run: npm config set workspaces true
+      - name: Install local types package
+        working-directory: packages/types
+        run: npm install
 
       - name: Install backend dependencies
         working-directory: apps/backend
