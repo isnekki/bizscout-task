@@ -32,7 +32,7 @@ export const Chart = memo(function Chart({ className = "", title = "Simulated Da
 
     function ChartContent() { 
         return (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" data-testid="chart-container">
                 <AreaChart  data={pingData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <defs>
                     <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
@@ -51,7 +51,7 @@ export const Chart = memo(function Chart({ className = "", title = "Simulated Da
     }
 
     return (
-        <Card className={className}>
+        <Card className={`h-full w-full ${className}`} data-testid="chart-card">
             <CardHeader className="pb-2">
                 <CardTitle>{title}</CardTitle>
             </CardHeader>

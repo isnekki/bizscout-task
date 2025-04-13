@@ -18,12 +18,12 @@ export default function LiveDashboard() {
     useEffect(() => {
         let isMounted = true;
         (async() => {
-            const historyResponse = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ limit: '10' }).toString())
-            const history = await historyResponse.json()
             try {
+                const historyResponse = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ limit: '10' }).toString())
+                const history = await historyResponse.json()
                 if (isMounted) setPings((state) => [...state, ...(history satisfies Data[])])
             } catch (error) {
-                console.error('Error retrieving history: ', error)
+                console.log('Error retrieving history: ', error)
                 toast.error('Uh-oh, something went wrong!', {
                     description: 'We encountered an error fetching data for this page.'
                 })
@@ -37,14 +37,14 @@ export default function LiveDashboard() {
             toast.success('Live feed connected!')
         })
         socket.on('disconnect', () => {
-            console.warn('Dicsonnected from the WebSocket.')
+            console.log('Dicsonnected from the WebSocket.')
             toast.warning('Disconnected from the live feed.')
         })
         socket.on('newResponse', (data) => {
             try {
                 setPings((state) => [data as Data, ...state])
             } catch(err) {
-                console.error(err)
+                console.log(err)
                 toast.error('Uh-oh, something went wrong!', {
                     description: 'We encountered an error trying to read the live data.'
                 })

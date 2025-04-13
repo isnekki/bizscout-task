@@ -1,12 +1,11 @@
 'use client'
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Chart } from "./chart";
 import { DataTable } from "./data-table";
 import type { Data } from "@repo/types";
 import { columns } from "./table-columns";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 /**
@@ -16,27 +15,42 @@ import { toast } from "sonner";
 export default function HistoryDashboard() {
     const [historicalPings, setHistoricalPings] = useState<Data[]>([])
     const [queryFrom, setQueryFrom] = useState<string>('1')
-    const [queryTo, setQueryTo] = useState<string>('1')
+    const [queryTo, setQueryTo] = useState<string>('10')
+    const [cache, setCache] = useState<Record<string, Data[]>>({})
 
     // Users input their starting point and ending point before pressing the 'Search' button to receive the correct historical data.
-    const history = useMemo(async () => {
+    const fetchHistoricalPings = useCallback(async (start: string, limit: string) => {
         try {
-            const response = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ start: `${parseInt(queryFrom) - 1}`, limit: queryTo }))
-            const history = await response.json()
-            return history as Data[]
+            const response = await fetch(`http://localhost:3002/api/responses?start=${parseInt(start) - 1}&limit=${limit}`);
+            const history = await response.json() as Data[];
+            return history
         } catch (error) {
-            console.error('Error fetching data: ', error)
+            console.error('Error fetching data: ', error);
             toast.error('Uh-oh, something went wrong!', {
                 description: 'We encountered an error trying to fetch data for this page.',
+            });
+        }
+    }, [])
+
+    const handleQuery = useCallback(async () => {
+        const cacheKey = `${queryFrom}-${queryTo}`
+
+        try {
+            if (cache[cacheKey]) return setHistoricalPings(cache[cacheKey])
+            const history = await fetchHistoricalPings(queryFrom, queryTo)
+            if (!history) return
+            setCache((state) => ({ ...state, [cacheKey]: history }))
+        } catch (error) {
+            console.error('Error fetching batch: ', error)
+            toast.error('Uh-oh, something went wrong!', {
+                description: 'We encountered an error fetching this batch of data.'
             })
         }
-    }, [queryFrom, queryTo])
+    }, [cache, fetchHistoricalPings, queryFrom, queryTo])
 
-    async function handleQuery() {
-        const data = await history
-        if (!data) return
-        setHistoricalPings(data)
-    }
+    useEffect(() => {
+        handleQuery()
+    }, [handleQuery])
 
     return (
         <div className='flex flex-col flex-grow h-full w-full gap-y-6'>
@@ -45,7 +59,7 @@ export default function HistoryDashboard() {
                     <Input 
                         type="number"
                         placeholder="From"
-                        value={queryFrom.toString()}
+                        value={queryFrom}
                         onChange={(event) => {
                             if (parseInt(event.target.value) <= 0) return setQueryFrom('1')
                             setQueryFrom(event.target.value)
@@ -63,7 +77,6 @@ export default function HistoryDashboard() {
                         }}
                         className='max-w-20'
                     />
-                    <Button onClick={async () => await handleQuery()}>Search</Button>
                 </div>
                 <DataTable columns={columns} data={historicalPings} />
             </div>
