@@ -8,11 +8,16 @@ import { columns } from "./table-columns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+/**
+ * This is the Dashboard component for displaying historical data from the backend's database based on
+ * user queries.
+ */
 export default function HistoryDashboard() {
     const [historicalPings, setHistoricalPings] = useState<Data[]>([])
     const [queryFrom, setQueryFrom] = useState<number>(1)
     const [queryTo, setQueryTo] = useState<number>(10)
 
+    // Users input their starting point and ending point before pressing the 'Search' button to receive the correct historical data.
     const history = useMemo(async () => {
         const response = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ start: `${queryFrom - 1}`, limit: `${queryTo}` }))
         const history = await response.json()

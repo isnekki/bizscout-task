@@ -2,7 +2,11 @@ import HistoryDashboard from "../components/history-dashboard";
 import LiveDashboard from "../components/live-dashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-
+/**
+ * The main page of the application.
+ * Component absraction was necessary for future upgrades in order to have state re-rendering
+ * only on the components that need to be re-rendered.
+ */
 export default function Home() {
   return (
     <div className='flex flex-col min-h-screen w-full items-center justify-center overflow-hidden'>

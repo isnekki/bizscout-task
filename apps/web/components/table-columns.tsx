@@ -7,6 +7,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
+/**
+ * This is the columns configuration for the data table.
+ * This was configured to match the data received from the backend
+ */
 export const columns: ColumnDef<Data>[] = [
     {
         id: 'id',

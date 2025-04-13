@@ -5,21 +5,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Data } from "@repo/types"
 import { memo } from "react"
 
-
+/**
+ * This is a custom Shadcn Chart component with tweaks to fit the project.
+ */
 interface SalesChartProps {
   className?: string
   title?: string
   pings: Data[]
 }
 
+/**
+ * Memoized component to enable caching
+ */
 export const Chart = memo(function Chart({ className = "", title = "Simulated Data", pings }: SalesChartProps) {
+    /**
+     * Instantiate a new array and populate it with the ping data as to not affect the original variable.
+     * Sort in descending order to match the table data.
+     * Format the data to be usable in a chart.
+     */
     const pingData = [...pings].sort((a, b) => (
         (new Date(a.requestPayload.timestamp).getTime()) - (new Date(b.requestPayload.timestamp).getTime())
     )).map(ping => ({
         timestamp: ping.requestPayload.timestamp,
         ping: ping.requestPayload.randomNumber * 1000
     }))
-    console.log(pingData)
 
     function ChartContent() { 
         return (

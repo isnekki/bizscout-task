@@ -7,9 +7,13 @@ import { columns } from './table-columns';
 import { DataTable } from './data-table';
 import { Chart } from './chart';
 
+/**
+ * This is the Dashboard component for displaying live data from the backend's WebSocket.
+ */
 export default function LiveDashboard() {
     const [pings, setPings] = useState<Data[]>([])
 
+    // Fetch 10 rows to populate the table for now as we wait 5 minutes for new data
     useEffect(() => {
         let isMounted = true;
         (async() => {
@@ -22,6 +26,7 @@ export default function LiveDashboard() {
             }
         })();
 
+        // Connect to the WebSocket and add logic to update state based on responses from the WebSocket
         const socket = io('ws://localhost:3001')
         socket.on('connect', () => console.log('Connected to WebSocket!'))
         socket.on('disconnect', () => console.log('Disconnected from WebSocket!'))
@@ -33,6 +38,7 @@ export default function LiveDashboard() {
             }
         })
 
+        // Cleanup function
         return () => { 
             isMounted = false
             setPings([])
