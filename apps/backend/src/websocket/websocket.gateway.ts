@@ -6,6 +6,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
+/**
+ * This is the WebSocket Gateway that handles live updates to the frontend.
+ * The port is set to 3001 as to have no interferance with the backend port (3002) or frontend port (3001)
+ */
 @WebSocketGateway(3001, { cors: true })
 export class WebsocketGateway
   implements OnGatewayConnection, OnGatewayDisconnect

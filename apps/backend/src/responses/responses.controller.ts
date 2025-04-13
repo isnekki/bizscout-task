@@ -3,10 +3,25 @@ import { ResponsesService } from './responses.service';
 import { ResponseData } from './entities/response-data.entity';
 import type { Data } from '@repo/types';
 
+/**
+ * The REST API endpoint for querying ping historical data from the database
+ */
 @Controller('api/responses')
 export class ResponsesController {
+  /**
+   * This is the constructor tasked with handling responses to the HTTP requests
+   *
+   * @param responsesService The service in charge of handling queries to the database
+   */
   constructor(private readonly responsesService: ResponsesService) {}
 
+  /**
+   * The GET handler for querying data from the database
+   *
+   * @param limit The number of rows to be returned
+   * @param start The starting row that the query will run
+   * @returns Promise<Data[]> referring to the queried data
+   */
   @Get()
   async getResponses(
     @Query('limit') limit?: string,
