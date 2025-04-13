@@ -19,23 +19,20 @@ jobs:
         with:
           node-version: "18.x"
 
-      - name: Setup latest npm
-        run: npm install -g npm@latest
-
       - name: Install root level dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Install backend dependencies
         working-directory: apps/backend
-        run: npm install
+        run: pnpm install
 
       - name: Lint backend
         working-directory: apps/backend
-        run: npm run lint
+        run: pnpm lint
 
       - name: Run backend tests
         working-directory: apps/backend
-        run: npm run test --coverage # Run tests and generate coverage
+        run: pnpm test --coverage # Run tests and generate coverage
 
       - name: Save backend coverage
         uses: actions/upload-artifact@v4
@@ -51,15 +48,15 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: apps/web
-        run: npm install
+        run: pnpm install
 
       - name: Lint frontend
         working-directory: apps/web
-        run: npm run lint
+        run: pnpm lint
 
       - name: Run frontend tests
         working-directory: apps/web
-        run: npm run test --coverage # Run tests and generate coverage
+        run: pnpm test --coverage # Run tests and generate coverage
 
       - name: Save frontend coverage
         uses: actions/upload-artifact@v4
