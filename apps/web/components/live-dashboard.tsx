@@ -7,15 +7,16 @@ import { columns } from './table-columns';
 import { DataTable } from './data-table';
 import { Chart } from './chart';
 
-export default function Dashboard() {
+export default function LiveDashboard() {
     const [pings, setPings] = useState<Data[]>([])
 
     useEffect(() => {
+        let isMounted = true;
         (async() => {
             const historyResponse = await fetch('http://localhost:3002/api/responses?' + new URLSearchParams({ limit: '10' }).toString())
             const history = await historyResponse.json()
             try {
-                setPings((state) => [...state, ...(history satisfies Data[])])
+                if (isMounted) setPings((state) => [...state, ...(history satisfies Data[])])
             } catch (error) {
                 console.error('Error retrieving history: ', error)
             }
@@ -32,16 +33,20 @@ export default function Dashboard() {
             }
         })
 
-        return () => { socket.disconnect() }
+        return () => { 
+            isMounted = false
+            setPings([])
+            socket.disconnect() 
+        }
     }, [])
 
     return (
-        <div className='flex flex-col h-[80svh] w-full gap-y-2'>
+        <div className='flex flex-col h-full w-full gap-y-6'>
             <div className='h-2/3'>
-                <DataTable columns={columns} data={pings} />
+                <DataTable columns={columns} data={pings} isScrolled />
             </div>
             <div className='h-1/3'>
-                <Chart pings={pings} className='h-full'/>
+                <Chart pings={pings} className='h-[25svh]'/>
             </div>
         </div>
     )
